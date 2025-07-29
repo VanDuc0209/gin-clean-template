@@ -67,6 +67,10 @@ type (
 		AllowCredentials bool     `mapstructure:"allow_credentials"`
 		MaxAge           int      `mapstructure:"max_age"`
 	}
+
+	MetricsConfig struct {
+		Enabled bool `mapstructure:"enabled"`
+	}
 )
 
 type Env struct {
@@ -75,6 +79,7 @@ type Env struct {
 	PostgresConfig PostgresConfig `mapstructure:"postgres"`
 	MongoConfig    MongoConfig    `mapstructure:"mongo"`
 	CORSConfig     CORSConfig     `mapstructure:"cors"`
+	MetricsConfig  MetricsConfig  `mapstructure:"metrics"`
 }
 
 var env Env

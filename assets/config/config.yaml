@@ -21,7 +21,7 @@ mongo:
 logging:
   level: "debug"
   format: "json"
-  filepath: "./log/app.log"
+  filepath: "./logs/app.log"
   max_size: 10
   max_age: 30
   max_backups: 3
@@ -36,4 +36,7 @@ cors:
   exposed_headers: ["Content-Length"]
   allow_credentials: false
   maxAge: 86400
+
+metrics:
+  enabled: false
   
