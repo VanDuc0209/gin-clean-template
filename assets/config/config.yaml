@@ -1,8 +1,9 @@
 app:
   name: "Go Clean Architecture"
   version: "1.0.0"
-  port: 8080
+  port: "8080"
   environment: "development"
+  timeout: 5 # seconds
   path_prefix: "/api"  # Optional, can be used to set a base path for the application
 
 postgres:

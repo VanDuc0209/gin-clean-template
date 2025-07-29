@@ -12,9 +12,10 @@ type (
 	AppConfig struct {
 		Name        string `mapstructure:"name"`
 		Version     string `mapstructure:"version"`
-		Port        int    `mapstructure:"port"`
+		Port        string `mapstructure:"port"`
 		Environment string `mapstructure:"environment"`
 		PathPrefix  string `mapstructure:"path_prefix"` // Optional, can be used to set a base path for the application
+		Timeout     uint   `mapstructure:"timeout"`     // Timeout in seconds
 	}
 
 	LoggerConfig struct {
@@ -146,7 +147,7 @@ func printStartupConfig(env *Env) {
 	fmt.Printf("%-15s: %s\n", "App Name", env.AppConfig.Name)
 	fmt.Printf("%-15s: %s\n", "Version", env.AppConfig.Version)
 	fmt.Printf("%-15s: %s\n", "Environment", env.AppConfig.Environment)
-	fmt.Printf("%-15s: %d\n", "Port", env.AppConfig.Port)
+	fmt.Printf("%-15s: %s\n", "Port", env.AppConfig.Port)
 	fmt.Printf("%-15s: %s\n", "Log Level", env.LoggerConfig.Level)
 
 	fmt.Println(line)

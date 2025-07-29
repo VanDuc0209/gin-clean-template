@@ -1,0 +1,4 @@
+{"level":"info","timestamp":"2025-07-29T14:28:45.204+0700","caller":"cmd/main.go:50","msg":"app - Run - signal: ","signal":"interrupt"}
+{"level":"info","timestamp":"2025-07-29T14:28:45.204+0700","caller":"cmd/main.go:59","msg":"app - Run - httpServer shutdown gracefully"}
+{"level":"info","timestamp":"2025-07-29T14:28:59.079+0700","caller":"cmd/main.go:50","msg":"app - Run - signal: ","signal":"interrupt"}
+{"level":"info","timestamp":"2025-07-29T14:28:59.079+0700","caller":"cmd/main.go:59","msg":"app - Run - httpServer shutdown gracefully"}
