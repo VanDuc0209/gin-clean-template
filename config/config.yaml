@@ -1,0 +1,29 @@
+app:
+  name: "Go Clean Architecture"
+  version: "1.0.0"
+  port: 8080
+  environment: "development"
+
+postgres:
+  host: "localhost"
+  port: 5432
+  user: "user"
+  password: "password"
+
+mongo:
+  uri: "mongodb://localhost:27017"
+  database: "mydatabase"
+  replicaSet: "rs0"
+  authSource: "admin"
+
+logging:
+  level: "debug"
+  format: "json"
+  filepath: "./log/app.log"
+  max_size: 10
+  max_age: 30
+  max_backups: 3
+  compress: false
+  localTime: true
+
+  
