@@ -81,9 +81,9 @@ var envLoaded bool
 
 func loadEnv() Env {
 	// Set up viper to read the config.yaml file
-	viper.SetConfigName("config")   // Config file name without extension
-	viper.SetConfigType("yaml")     // Config file type
-	viper.AddConfigPath("./config") // Look for the config file in the current directory
+	viper.SetConfigName("config")          // Config file name without extension
+	viper.SetConfigType("yaml")            // Config file type
+	viper.AddConfigPath("./assets/config") // Look for the config file in the current directory
 
 	/*
 	   AutomaticEnv will check for an environment variable any time a viper.Get request is made.
@@ -91,7 +91,7 @@ func loadEnv() Env {
 	       It will check for an environment variable with a name matching the key uppercased and prefixed with the EnvPrefix if set.
 	*/
 	viper.AutomaticEnv()
-	viper.SetEnvPrefix("env") // will be uppercased automatically
+	// viper.SetEnvPrefix("env") // will be uppercased automatically
 	viper.SetEnvKeyReplacer(
 		strings.NewReplacer(".", "_"),
 	) // this is useful e.g. want to use . in Get() calls, but environmental variables to use _ delimiters (e.g. app.port -> APP_PORT)
