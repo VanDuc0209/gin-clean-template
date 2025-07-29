@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/duccv/go-clean-template/config"
+	"github.com/duccv/go-clean-template/pkg/metrics"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/timeout"
 	"github.com/gin-gonic/gin"
@@ -75,6 +76,11 @@ func (s *Server) initGinServer(env *config.Env) *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(timeoutMiddleware(s.timeout))
+
+	if env.MetricsConfig.Enabled {
+		m := metrics.GetMonitor("/metrics")
+		m.Use(r)
+	}
 
 	if env.CORSConfig.Enabled {
 		corsConfig := cors.Config{

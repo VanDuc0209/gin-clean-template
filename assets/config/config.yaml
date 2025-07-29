@@ -38,5 +38,5 @@ cors:
   maxAge: 86400
 
 metrics:
-  enabled: false
+  enabled: true
   
