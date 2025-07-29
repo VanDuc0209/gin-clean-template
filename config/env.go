@@ -14,28 +14,72 @@ type (
 		Version     string `mapstructure:"version"`
 		Port        int    `mapstructure:"port"`
 		Environment string `mapstructure:"environment"`
+		PathPrefix  string `mapstructure:"path_prefix"` // Optional, can be used to set a base path for the application
 	}
 
 	LoggerConfig struct {
-		Level      string `mapstructure:"level"`
-		Format     string `mapstructure:"format"`
-		FilePath   string `mapstructure:"filepath"`
-		MaxSize    int    `mapstructure:"max_size"`
-		MaxAge     int    `mapstructure:"max_age"`
-		MaxBackups int    `mapstructure:"max_backups"`
-		Compress   bool   `mapstructure:"compress"`
-		LocalTime  bool   `mapstructure:"localTime"`
+		Level       string `mapstructure:"level"`
+		Format      string `mapstructure:"format"`
+		FilePath    string `mapstructure:"filepath"`
+		MaxSize     int    `mapstructure:"max_size"`
+		MaxAge      int    `mapstructure:"max_age"`
+		MaxBackups  int    `mapstructure:"max_backups"`
+		Compress    bool   `mapstructure:"compress"`
+		LocalTime   bool   `mapstructure:"localTime"`
+		Environment string
+	}
+
+	PostgresConfig struct {
+		Host              string `mapstructure:"host"`
+		Port              int    `mapstructure:"port"`
+		User              string `mapstructure:"user"`
+		Password          string `mapstructure:"password"`
+		Database          string `mapstructure:"database"`
+		SSLMode           string `mapstructure:"sslmode"`
+		ConnectionString  string `mapstructure:"connection_string"`
+		ConnectionTimeout int    `mapstructure:"connection_timeout"`
+		MaxIdleConns      int    `mapstructure:"max_idle_conns"`
+		MaxOpenConns      int    `mapstructure:"max_open_conns"`
+		ConnMaxLifetime   int    `mapstructure:"conn_max_lifetime"`
+		ConnMaxIdleTime   int    `mapstructure:"conn_max_idle_time"`
+	}
+
+	MongoConfig struct {
+		URI            string `mapstructure:"uri"`
+		Database       string `mapstructure:"database"`
+		ReplicaSet     string `mapstructure:"replicaSet"`
+		AuthSource     string `mapstructure:"authSource"`
+		Username       string `mapstructure:"username"`
+		Password       string `mapstructure:"password"`
+		ConnectTimeout int    `mapstructure:"connect_timeout"`
+		MaxPoolSize    int    `mapstructure:"max_pool_size"`
+		MinPoolSize    int    `mapstructure:"min_pool_size"`
+		SocketTimeout  int    `mapstructure:"socket_timeout"`
+	}
+
+	CORSConfig struct {
+		Enabled          bool     `mapstructure:"enabled"`
+		AllowedOrigins   []string `mapstructure:"allowed_origins"`
+		AllowedMethods   []string `mapstructure:"allowed_methods"`
+		AllowedHeaders   []string `mapstructure:"allowed_headers"`
+		ExposedHeaders   []string `mapstructure:"exposed_headers"`
+		AllowCredentials bool     `mapstructure:"allow_credentials"`
+		MaxAge           int      `mapstructure:"max_age"`
 	}
 )
 
 type Env struct {
-	AppConfig    AppConfig    `mapstructure:"app"`
-	LoggerConfig LoggerConfig `mapstructure:"logging"`
+	AppConfig      AppConfig      `mapstructure:"app"`
+	LoggerConfig   LoggerConfig   `mapstructure:"logging"`
+	PostgresConfig PostgresConfig `mapstructure:"postgres"`
+	MongoConfig    MongoConfig    `mapstructure:"mongo"`
+	CORSConfig     CORSConfig     `mapstructure:"cors"`
 }
 
 var env Env
+var envLoaded bool
 
-func loadEnv() *Env {
+func loadEnv() Env {
 	// Set up viper to read the config.yaml file
 	viper.SetConfigName("config")   // Config file name without extension
 	viper.SetConfigType("yaml")     // Config file type
@@ -74,17 +118,23 @@ func loadEnv() *Env {
 	if err != nil {
 		log.Fatalf("Unable to decode into struct, %v", err)
 	}
+	env.LoggerConfig.Environment = env.AppConfig.Environment // Set the logger environment from app config
+	if env.AppConfig.Environment == "production" {
+		env.LoggerConfig.Level = "info" // Default to info level in production
+	}
 
 	printStartupConfig(&env)
 
-	return &env
+	return env
 }
 
 func GetEnv() *Env {
-	if env != (Env{}) {
+	if envLoaded {
 		return &env
 	}
-	return loadEnv()
+	env = loadEnv()
+	envLoaded = true
+	return &env
 }
 
 func printStartupConfig(env *Env) {

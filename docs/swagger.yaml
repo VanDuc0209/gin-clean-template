@@ -1,0 +1,29 @@
+info:
+  contact:
+    email: duccv@gviet.vn
+    name: DucCV
+  description: Content service Swagger APIs.
+  termsOfService: http://swagger.io/terms/
+  title: CONTENT SERVICE APIs
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: Returns status 200 if the service is running
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Health Check
+      tags:
+      - Health
+securityDefinitions:
+  BearerAuth:
+    description: JWT authorization header
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
