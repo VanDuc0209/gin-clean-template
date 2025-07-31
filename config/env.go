@@ -71,6 +71,19 @@ type (
 	MetricsConfig struct {
 		Enabled bool `mapstructure:"enabled"`
 	}
+
+	RedisConfig struct {
+		Type       string `mapstructure:"type"`  // "NORMAL" or "SENTINEL"
+		Addrs      string `mapstructure:"addrs"` // Comma-separated list of Redis addresses
+		Password   string `mapstructure:"password"`
+		MasterName string `mapstructure:"master_name"` // Required for Sentinel mode
+	}
+
+	CacheConfig struct {
+		Type       string `mapstructure:"type"`        // "LRU" or "FIFO"
+		Capacity   int    `mapstructure:"capacity"`    // Number of items to keep in cache
+		DefaultTTL int    `mapstructure:"default_ttl"` // Time to live for cache items in seconds
+	}
 )
 
 type Env struct {
@@ -80,6 +93,8 @@ type Env struct {
 	MongoConfig    MongoConfig    `mapstructure:"mongo"`
 	CORSConfig     CORSConfig     `mapstructure:"cors"`
 	MetricsConfig  MetricsConfig  `mapstructure:"metrics"`
+	RedisConfig    RedisConfig    `mapstructure:"redis"`
+	CacheConfig    CacheConfig    `mapstructure:"cache"`
 }
 
 var env Env
