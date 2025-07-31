@@ -40,7 +40,7 @@ func Validate[B any, P any, Q any]() gin.HandlerFunc {
 			rawData, err := io.ReadAll(c.Request.Body)
 			if err != nil {
 				error = err.Error()
-				resData.Error = err.Error()
+				resData.Msg = err.Error()
 				c.AbortWithStatusJSON(http.StatusBadRequest, resData)
 				return
 			}
@@ -48,13 +48,13 @@ func Validate[B any, P any, Q any]() gin.HandlerFunc {
 
 			if err := c.ShouldBindJSON(&body); err != nil {
 				error = err.Error()
-				resData.Error = err.Error()
+				resData.Msg = err.Error()
 				c.AbortWithStatusJSON(http.StatusBadRequest, resData)
 				return
 			}
 			if err := validate.Struct(body); err != nil {
 				error = err.Error()
-				resData.Error = err.Error()
+				resData.Msg = err.Error()
 				c.AbortWithStatusJSON(http.StatusBadRequest, resData)
 				return
 			}
@@ -73,13 +73,13 @@ func Validate[B any, P any, Q any]() gin.HandlerFunc {
 
 			if err := c.ShouldBindUri(&params); err != nil {
 				error = err.Error()
-				resData.Error = err.Error()
+				resData.Msg = err.Error()
 				c.AbortWithStatusJSON(http.StatusBadRequest, resData)
 				return
 			}
 			if err := validate.Struct(params); err != nil {
 				error = err.Error()
-				resData.Error = err.Error()
+				resData.Msg = err.Error()
 				c.AbortWithStatusJSON(http.StatusBadRequest, resData)
 				return
 			}
@@ -99,13 +99,13 @@ func Validate[B any, P any, Q any]() gin.HandlerFunc {
 
 			if err := c.ShouldBindQuery(&query); err != nil {
 				error = err.Error()
-				resData.Error = err.Error()
+				resData.Msg = err.Error()
 				c.AbortWithStatusJSON(http.StatusBadRequest, resData)
 				return
 			}
 			if err := validate.Struct(query); err != nil {
 				error = err.Error()
-				resData.Error = err.Error()
+				resData.Msg = err.Error()
 				c.AbortWithStatusJSON(http.StatusBadRequest, resData)
 				return
 			}
