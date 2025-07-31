@@ -11,6 +11,16 @@ var BAD_REQUEST = response.ResponseData{
 	Msg: "Bad request",
 }
 
+var NOT_IMPLEMENTED = response.ResponseData{
+	Ec:  http.StatusNotImplemented,
+	Msg: "Not implemented",
+}
+
+var RESPONSE_TIMEOUT = response.ResponseData{
+	Ec:  http.StatusRequestTimeout,
+	Msg: "Request timeout",
+}
+
 var INVALID_REQUEST = response.ResponseData{
 	Ec:  http.StatusBadRequest,
 	Msg: "Invalid request payload",

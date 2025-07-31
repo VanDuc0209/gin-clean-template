@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/duccv/go-clean-template/config"
+	"github.com/duccv/go-clean-template/internal/constant"
 	"github.com/duccv/go-clean-template/pkg/metrics"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/timeout"
@@ -51,7 +52,7 @@ func New(env *config.Env, opts ...Option) *Server {
 }
 
 func timeoutResponse(c *gin.Context) {
-	c.String(http.StatusRequestTimeout, "timeout")
+	c.JSON(http.StatusRequestTimeout, constant.RESPONSE_TIMEOUT)
 }
 func timeoutMiddleware(to time.Duration) gin.HandlerFunc {
 	return timeout.New(

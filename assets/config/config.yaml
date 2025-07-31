@@ -35,7 +35,7 @@ cors:
   allowed_headers: ["Content-Type", "Authorization", "If-None-Match"]
   exposed_headers: ["Content-Length"]
   allow_credentials: false
-  maxAge: 86400
+  max_age: 86400
 
 metrics:
   enabled: true
@@ -50,3 +50,10 @@ cache:
   type: "LRU"  # or "FIFO"
   capacity: 1000  # Number of items to keep in cache
   default_ttl: 60  # Time to live for cache items in seconds
+
+jwt:
+  secret_key: "your-super-secret-jwt-key-change-in-production"
+  expiration: "24h"
+  refresh_expiration: "168h" # 7 days
+  issuer: "shortlink-api"
+  audience: "shortlink-users"
