@@ -6,17 +6,32 @@ app:
   timeout: 5 # seconds
   path_prefix: "/api"  # Optional, can be used to set a base path for the application
 
-postgres:
-  host: "localhost"
-  port: 5432
-  user: "user"
-  password: "password"
-
 mongo:
   uri: "mongodb://localhost:27017"
   database: "mydatabase"
   replicaSet: "rs0"
   authSource: "admin"
+
+database:
+  type: "postgres"
+  postgres:
+    host: "localhost"
+    port: 5432
+    read_host: "localhost"
+    read_port: 5432
+    write_host: "localhost"
+    write_port: 5432
+    username: "user"
+    password: "password"
+  mongo:
+    uri: "mongodb://localhost:27017"
+    hosts:
+      - "localhost"
+    ports:
+      - 27017
+    database: "mydatabase"
+    replicaSet: "rs0"
+    authSource: "admin"
 
 logging:
   level: "debug"
@@ -27,6 +42,10 @@ logging:
   max_backups: 3
   compress: false
   localTime: true
+  conn_max_lifetime: 0 #hour
+  conn_max_idle_time: 30 #minute
+  health_check_period: 1 #minute
+
 
 cors:
   enabled: true

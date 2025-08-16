@@ -33,29 +33,43 @@ type (
 	PostgresConfig struct {
 		Host              string `mapstructure:"host"`
 		Port              int    `mapstructure:"port"`
-		User              string `mapstructure:"user"`
+		ReadHost          string `mapstructure:"read_host"`
+		ReadPort          int    `mapstructure:"read_port"`
+		WriteHost         string `mapstructure:"write_host"`
+		WritePort         int    `mapstructure:"write_port"`
+		Username          string `mapstructure:"username"`
 		Password          string `mapstructure:"password"`
 		Database          string `mapstructure:"database"`
 		SSLMode           string `mapstructure:"sslmode"`
-		ConnectionString  string `mapstructure:"connection_string"`
-		ConnectionTimeout int    `mapstructure:"connection_timeout"`
-		MaxIdleConns      int    `mapstructure:"max_idle_conns"`
-		MaxOpenConns      int    `mapstructure:"max_open_conns"`
+		ConnectTimeout    int    `mapstructure:"connect_timeout"`
+		MinConns          int32  `mapstructure:"min_conns"`
+		MaxConns          int32  `mapstructure:"max_conns"`
 		ConnMaxLifetime   int    `mapstructure:"conn_max_lifetime"`
 		ConnMaxIdleTime   int    `mapstructure:"conn_max_idle_time"`
+		HealthCheckPeriod int    `mapstructure:"health_check_period"`
 	}
 
 	MongoConfig struct {
-		URI            string `mapstructure:"uri"`
-		Database       string `mapstructure:"database"`
-		ReplicaSet     string `mapstructure:"replicaSet"`
-		AuthSource     string `mapstructure:"authSource"`
-		Username       string `mapstructure:"username"`
-		Password       string `mapstructure:"password"`
-		ConnectTimeout int    `mapstructure:"connect_timeout"`
-		MaxPoolSize    int    `mapstructure:"max_pool_size"`
-		MinPoolSize    int    `mapstructure:"min_pool_size"`
-		SocketTimeout  int    `mapstructure:"socket_timeout"`
+		Type            string   `mapstructure:"type"`
+		URI             string   `mapstructure:"uri"`
+		Database        string   `mapstructure:"database"`
+		ReplicaSetName  string   `mapstructure:"replicaSetName"`
+		AuthSource      string   `mapstructure:"authSource"`
+		Username        string   `mapstructure:"username"`
+		Password        string   `mapstructure:"password"`
+		ConnectTimeout  int      `mapstructure:"connect_timeout"`
+		MaxPoolSize     uint64   `mapstructure:"max_pool_size"`
+		MinPoolSize     uint64   `mapstructure:"min_pool_size"`
+		MaxConnIdleTime int      `mapstructure:"max_conn_idle_time"`
+		SocketTimeout   int      `mapstructure:"socket_timeout"`
+		Hosts           []string `mapstructure:"hosts"`
+		Ports           []int    `mapstructure:"ports"`
+		Host            string   `mapstructure:"host"`
+		Port            int      `mapstructure:"port"`
+		ReadHost        string   `mapstructure:"read_host"`
+		ReadPort        int      `mapstructure:"read_port"`
+		WriteHost       string   `mapstructure:"write_host"`
+		WritePort       int      `mapstructure:"write_port"`
 	}
 
 	CORSConfig struct {
@@ -84,17 +98,22 @@ type (
 		Capacity   int    `mapstructure:"capacity"`    // Number of items to keep in cache
 		DefaultTTL int    `mapstructure:"default_ttl"` // Time to live for cache items in seconds
 	}
+
+	DatabaseConfig struct {
+		Type           string         `mapstructure:"type"`
+		MongoConfig    MongoConfig    `mapstructure:"mongo"`
+		PostgresConfig PostgresConfig `mapstructure:"postgres"`
+	}
 )
 
 type Env struct {
 	AppConfig      AppConfig      `mapstructure:"app"`
 	LoggerConfig   LoggerConfig   `mapstructure:"logging"`
-	PostgresConfig PostgresConfig `mapstructure:"postgres"`
-	MongoConfig    MongoConfig    `mapstructure:"mongo"`
 	CORSConfig     CORSConfig     `mapstructure:"cors"`
 	MetricsConfig  MetricsConfig  `mapstructure:"metrics"`
 	RedisConfig    RedisConfig    `mapstructure:"redis"`
 	CacheConfig    CacheConfig    `mapstructure:"cache"`
+	DatabaseConfig DatabaseConfig `mapstructure:"database"`
 }
 
 var env Env
