@@ -6,6 +6,7 @@ import (
 
 	"github.com/duccv/go-clean-template/config"
 	"github.com/duccv/go-clean-template/internal/constant"
+	"github.com/duccv/go-clean-template/internal/middleware"
 	"github.com/duccv/go-clean-template/pkg/metrics"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/timeout"
@@ -72,11 +73,11 @@ func (s *Server) initGinServer(env *config.Env) *gin.Engine {
 	} else {
 		gin.SetMode(gin.DebugMode)
 	}
-
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	r.Use(timeoutMiddleware(s.timeout))
+	r.Use(middleware.CorrelationIDMiddleware())
 
 	if env.MetricsConfig.Enabled {
 		m := metrics.GetMonitor("/metrics")

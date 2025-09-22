@@ -1,8 +1,6 @@
 package middleware
 
 import (
-	"crypto/rand"
-	"fmt"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -67,14 +65,6 @@ func DefaultMiddlewareConfig() *MiddlewareConfig {
 		TrackIPAddress:   true,
 		TrackReferrer:    true,
 	}
-}
-
-// generateRequestID generates a unique request ID
-func generateRequestID() string {
-	// Generate a random 8-byte ID
-	b := make([]byte, 8)
-	rand.Read(b)
-	return fmt.Sprintf("%x", b)
 }
 
 // getClientIP extracts the real client IP address

@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/duccv/go-clean-template/config"
-	"github.com/duccv/go-clean-template/pkg/logger"
 	http_server "github.com/duccv/go-clean-template/pkg/server/http"
+	"github.com/duccv/go-clean-template/pkg/zaplog"
 	"go.uber.org/zap"
 
 	_ "github.com/duccv/go-clean-template/docs"
@@ -28,7 +28,7 @@ import (
 func main() {
 	env := config.GetEnv()
 
-	zapLogger := logger.GetLogger(env.LoggerConfig)
+	zapLogger := zaplog.GetLogger(env.LoggerConfig)
 	zap.ReplaceGlobals(zapLogger)
 	defer zapLogger.Sync()
 

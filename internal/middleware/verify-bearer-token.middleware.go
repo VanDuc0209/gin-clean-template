@@ -83,7 +83,7 @@ func verifyToken(tokenString string, secret []byte) (*model.JWTPayload, error) {
 
 	err = validate.Struct(payload)
 	if err != nil {
-		return nil, fmt.Errorf("Validate Payload error: %w", err)
+		return nil, fmt.Errorf("validate Payload error: %w", err)
 	}
 
 	return &payload, nil

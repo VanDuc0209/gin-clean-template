@@ -1,4 +1,4 @@
-package logger
+package zaplog
 
 import (
 	"context"
@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/duccv/go-clean-template/config"
+	"github.com/duccv/go-clean-template/internal/constant"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
@@ -16,7 +17,6 @@ import (
 var zapLogger *zap.Logger
 
 // CorrelationIDKey is the key used for correlation IDs in context
-const CorrelationIDKey = "correlationId"
 
 // initLogger initializes the Zap logger with the given configuration
 func initLogger(cfg config.LoggerConfig) *zap.Logger {
@@ -96,10 +96,8 @@ func GetLogger(cfg config.LoggerConfig) *zap.Logger {
 }
 
 // GetLoggerFromContext returns a logger with correlation ID from context
-func GetLoggerFromContext(ctx context.Context, cfg config.LoggerConfig) *zap.Logger {
-	logger := GetLogger(cfg)
-
-	if correlationID, ok := ctx.Value(CorrelationIDKey).(string); ok && correlationID != "" {
+func GetLoggerFromContext(ctx context.Context, logger *zap.Logger) *zap.Logger {
+	if correlationID, ok := ctx.Value(constant.CorrelationIDKey).(string); ok && correlationID != "" {
 		return logger.With(zap.String("correlation_id", correlationID))
 	}
 
