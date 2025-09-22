@@ -2,6 +2,7 @@ package http_server
 
 import (
 	"net/http"
+	"sync/atomic"
 	"time"
 
 	"github.com/duccv/go-clean-template/config"
@@ -20,11 +21,21 @@ import (
 // HealthCheck godoc
 //
 //	@Summary		Health Check
-//	@Description	Returns status 200 if the service is running
+//	@Description	Returns 200 with {"status":"ok"} when the service is running
 //	@Tags			Health
-//	@Produce		plain
-//	@Success		200	{string}	string	"OK"
+//	@Produce		json
+//	@Success		200	{object}	map[string]string
 //	@Router			/health [get]
+
+// ReadyCheck godoc
+//
+//	@Summary		Readiness Check
+//	@Description	Returns 200 with {"status":"ready"} if service is ready, otherwise 503 with {"status":"not ready"}
+//	@Tags			Health
+//	@Produce		json
+//	@Success		200	{object}	map[string]string
+//	@Failure		503	{object}	map[string]string
+//	@Router			/ready [get]
 
 type Server struct {
 	App    *gin.Engine
@@ -32,6 +43,37 @@ type Server struct {
 
 	address string
 	timeout time.Duration
+}
+
+var ready atomic.Bool
+
+// HealthCheck godoc
+//
+//	@Summary		Health Check
+//	@Description	Returns 200 with {"status":"ok"} when the service is running
+//	@Tags			Health
+//	@Produce		json
+//	@Success		200	{object}	map[string]string
+//	@Router			/health [get]
+func healthHandler(c *gin.Context) {
+	c.AbortWithStatusJSON(http.StatusOK, gin.H{"status": "ok"})
+}
+
+// ReadyCheck godoc
+//
+//	@Summary		Readiness Check
+//	@Description	Returns 200 with {"status":"ready"} if service is ready, otherwise 503 with {"status":"not ready"}
+//	@Tags			Health
+//	@Produce		json
+//	@Success		200	{object}	map[string]string
+//	@Failure		503	{object}	map[string]string
+//	@Router			/ready [get]
+func readyHandler(c *gin.Context) {
+	if ready.Load() {
+		c.JSON(http.StatusOK, gin.H{"status": "ready"})
+		return
+	}
+	c.JSON(http.StatusServiceUnavailable, gin.H{"status": "not ready"})
 }
 
 // New -.
@@ -97,10 +139,16 @@ func (s *Server) initGinServer(env *config.Env) *gin.Engine {
 		r.Use(cors.New(corsConfig))
 	}
 
-	// Health check endpoint
-	r.GET("/health", func(c *gin.Context) {
-		c.AbortWithStatusJSON(200, gin.H{"status": "ok"})
-	})
+	// Health and Readiness endpoints
+	r.GET("/health", healthHandler)
+	r.GET("/ready", readyHandler)
+
+	// Giả sử app cần warm-up (kết nối DB, cache,…)
+	go func() {
+		// TODO: init DB, cache, external service…
+		time.Sleep(10 * time.Second) // ví dụ
+		ready.Store(true)            // báo là đã sẵn sàng
+	}()
 
 	// Swagger documentation
 	r.GET(pathPrefix+"/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
