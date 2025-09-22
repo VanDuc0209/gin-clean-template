@@ -1,5 +1,5 @@
 # Step 1: Modules caching
-FROM golang:1.24.5-alpine3.21 AS modules
+FROM golang:1.25.1-alpine3.21 AS modules
 
 COPY go.mod go.sum /modules/
 
@@ -8,7 +8,7 @@ WORKDIR /modules
 RUN go mod download
 
 # Step 2: Builder
-FROM golang:1.24.5-alpine3.21 AS builder
+FROM golang:1.25.1-alpine3.21 AS builder
 
 RUN apk add --no-cache ca-certificates
 

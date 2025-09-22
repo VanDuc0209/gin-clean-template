@@ -18,28 +18,7 @@ const docTemplate = `{
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {
-        "/health": {
-            "get": {
-                "description": "Returns status 200 if the service is running",
-                "produces": [
-                    "text/plain"
-                ],
-                "tags": [
-                    "Health"
-                ],
-                "summary": "Health Check",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        }
-    },
+    "paths": {},
     "securityDefinitions": {
         "BearerAuth": {
             "description": "JWT authorization header",
